@@ -5,6 +5,6 @@ from articles import views
 
 urlpatterns = [
     # user/
-    path('', views.ArticleView.as_view()),
- 
+    path('', views.ArticleView.as_view(), name='article_view'),
+    path('<int:pk>/', views.ArticleDetailView.as_view(), name='article_detail_view'),
 ]

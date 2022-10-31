@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+from yaml import serialize
 from articles.serializers import ArticleSerializer
 from articles.models import Article as ArticleModel
 # Create your views here.
@@ -21,3 +22,9 @@ class ArticleView(APIView):
             return Response({"message": "글 작성 완료!!"})
         else:
             return Response({"message": f'${serializer.errors}'}, 400)
+
+class ArticleDetailView(APIView):
+    def get(self, request, pk):
+        article = ArticleModel.objects.get(pk=pk)
+        serialize = ArticleSerializer(article)
+        return Response(serialize.data)

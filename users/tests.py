@@ -4,16 +4,17 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from users.models import User
 
-class UserRegistrationAPIViewTestCase(APITestCase):
+class UserRegistrationTest(APITestCase):
     def test_registration(self):
         url = reverse("user_view")
         user_data = {
-            "email": "deft@naver.com",
+            "username": "deft",
             "password": "deft",
+            "email": "deft@naver.com",
+            "fullname": "deft",
             }
         response = self.client.post(url, user_data)
-        print('uuu111', response.status_code)
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
     
 #     def test_login(self):
 #         url = reverse("token_obtain_pair")
@@ -29,7 +30,7 @@ class UserRegistrationAPIViewTestCase(APITestCase):
     
 class LoginUserTest(APITestCase):
     def setUp(self):
-        self.data = {"email": "deft@naver.com", 'password': 'deft'}
+        self.data = {'username': 'deft', 'password': 'deft'}
         self.user = User.objects.create_user('deft', 'deft')
     
     def test_login(self):
@@ -38,3 +39,8 @@ class LoginUserTest(APITestCase):
     
     def test_get_user_data(self):
         access_token = self.client.post(reverse('token_obtain_pair'), self.data).data['access']
+        response = self.client.get(
+            path=reverse("user_view"),
+            HTTP_AUTHORIZATION=f"Bearer {access_token}")
+        print(response.data)
+        self.assertEqual(response.status_code, 200)
