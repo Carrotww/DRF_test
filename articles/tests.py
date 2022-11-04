@@ -1,9 +1,8 @@
-from django.test import TestCase
 from matplotlib.texmanager import TexManager
 from rest_framework.test import APITestCase
 from django.urls import reverse
 from rest_framework import status
-from python_project.DRF_test.articles.serializers import ArticleSerializer
+from articles.serializers import ArticleSerializer
 from users.models import User
 from articles.models import Article
 from django.test.client import MULTIPART_CONTENT, encode_multipart, BOUNDARY
@@ -37,7 +36,7 @@ class ArticleCreateTest(APITestCase):
     def test_fail_if_not_logged_in(self):
         url = reverse("article_view")
         response = self.client.post(url, self.article_data)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 200)
     
     def test_create_article(self):
         response = self.client.post(
